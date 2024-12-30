@@ -16,7 +16,7 @@ const Register = () => {
           onFinish={onRegister}
         >
           <Form.Item
-            name="fullName"
+            name="name"
             label="Full Name"
             rules={[{ required: true, message: "Full name is required" }]}
           >
@@ -34,27 +34,6 @@ const Register = () => {
             ]}
           >
             <Input />
-          </Form.Item>
-          <Form.Item
-            name="username"
-            label="Username"
-            rules={[{ required: true, message: "Username is required" }]}
-          >
-            <Input />
-          </Form.Item>
-          <Form.Item
-            name="phoneNumber"
-            label="Phone Number"
-            rules={[
-              { required: true, message: "Phone number is required" },
-              {
-                pattern:
-                  /^\+?[1-9]\d{1,14}$|^(\+?[0-9]{1,3})?[-.\s]?\(?[0-9]{1,4}?\)?[-.\s]?[0-9]{1,4}[-.\s]?[0-9]{1,9}$/,
-                message: "Invalid phone number",
-              },
-            ]}
-          >
-            <Input addonBefore="+234" />
           </Form.Item>
           <Form.Item
             name="password"

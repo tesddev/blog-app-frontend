@@ -18,8 +18,8 @@ const useRegister = () => {
         request
       );
       setLoading(false);
-
-      if (response.data?.responseCode === "00") {
+      
+      if (response.data?.succeeded) {
         onNotify("success", "Successful", response?.data?.responseMessage);
         setTimeout(() => {
             return navigate("/")
