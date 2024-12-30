@@ -68,28 +68,6 @@ const Settings = () => {
               onFinish={handleAccountUpdate}
             >
               <h2>Account Information</h2>
-
-              <Form.Item
-                name="username"
-                label="Username"
-                rules={[{ required: true, message: "Please enter your username" }]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item
-                name="email"
-                label="Email"
-                rules={[{ required: true, message: "Please enter your email" }]}
-              >
-                <Input />
-              </Form.Item>
-
-              <Form.Item>
-                <Button type="primary" htmlType="submit">
-                  Update Account
-                </Button>
-              </Form.Item>
             </Form>
 
         
