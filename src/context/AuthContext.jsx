@@ -22,7 +22,7 @@ export const AuthProvider = ({ children }) => {
 };
 
 AuthProvider.propTypes = {
-    children: PropTypes.node.isRequired, // Validate that 'children' is a required React node
+    children: PropTypes.node.isRequired,
 };
 
 export default AuthContext;
