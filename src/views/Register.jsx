@@ -1,9 +1,17 @@
-import { Card, Form, Input, Button } from "antd";
+import { Card, Form, Input, Button, Checkbox } from "antd";
 import { Link } from "react-router-dom";
 import useRegister from "../customHooks/useRegister";
+import { useState } from "react";
 
 const Register = () => {
   const { onRegister, loading } = useRegister();
+  const [isAuthor, setIsAuthor] = useState(false);
+
+  const handleFormSubmit = (values) => {
+    const role = isAuthor ? "Author" : "Reader";
+    onRegister({ ...values, role });
+  };
+
   return (
     <div className="min-h-[100svh] flex items-center justify-center bg-[#f5f5f5]">
       <Card className="max-w-[30rem] w-[90%]">
@@ -13,7 +21,7 @@ const Register = () => {
           layout="vertical"
           labelCol={{ span: 24 }}
           wrapperCol={{ span: 24 }}
-          onFinish={onRegister}
+          onFinish={handleFormSubmit}
         >
           <Form.Item
             name="name"
@@ -48,6 +56,14 @@ const Register = () => {
             ]}
           >
             <Input.Password />
+          </Form.Item>
+          <Form.Item>
+            <Checkbox
+              checked={isAuthor}
+              onChange={(e) => setIsAuthor(e.target.checked)}
+            >
+              I am an author
+            </Checkbox>
           </Form.Item>
           <Button type="primary" loading={loading} htmlType="submit" block>
             Register
