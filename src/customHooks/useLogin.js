@@ -3,11 +3,14 @@ import { axiosInstance } from "../api/axiosInstance.config";
 import { endpoints } from "../api/endpoints";
 import useNotification from "./useNotification";
 import { useNavigate } from "react-router-dom"
+import { useContext } from "react";
+import { UserContext } from "../context/UserContext";
 
 const useLogin = () => {
   const [loading, setLoading] = useState(false);
   const { onNotify } = useNotification();
   const navigate = useNavigate()
+  const { setRole } = useContext(UserContext);
 
   // function to call for login
   const onLogin = async (request) => {
@@ -20,11 +23,12 @@ const useLogin = () => {
       setLoading(false);
 
       if (response.data?.succeeded) {
-        const { token, userName } = response.data.resultData;
+        const { token, userName, role } = response.data.resultData;
         onNotify("success", "Successful", response?.data?.message);
 
         sessionStorage.setItem("token", token);
         sessionStorage.setItem("userName", userName);
+        setRole(role);
 
         setTimeout(() => {
           navigate("/dashboard", { replace: true });
