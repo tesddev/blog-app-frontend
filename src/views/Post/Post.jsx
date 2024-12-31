@@ -1,19 +1,29 @@
 import "./styling/product.css";
 import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
-import { Layout, Menu, Button, Input } from "antd";
+import { Layout, Menu, Button, Input, Select } from "antd";
 import { DashboardOutlined, SettingOutlined, EditOutlined } from "@ant-design/icons";
 import ReactMarkdown from "react-markdown";
 import { UserContext } from "../../context/UserContext.jsx";
+import usePost from "../../customHooks/usePost.js";
 
 const { Header, Content, Sider } = Layout;
 const { TextArea } = Input;
+const { Option } = Select;
+
 const BlogPost = () => {
-  const [blogs, setBlogs] = useState([]);
   const [newBlog, setNewBlog] = useState({
     title: "",
     content: "",
+    categories: [],
+    tags: [],
   });
+
+  const { userRole } = useContext(UserContext);
+  const { postBlog, loading } = usePost();
+
+  const availableCategories = ["Health", "Technology", "Finance", "Education", "Others"];
+  const availableTags = ["Trend", "Tech", "Family", "Others"];
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -23,11 +33,28 @@ const BlogPost = () => {
     }));
   };
 
-  const handlePost = () => {
-    const id = blogs.length + 1;
-    const addBlog = { ...newBlog, id };
-    setBlogs([...blogs, addBlog]);
-    setNewBlog({ title: "", content: "" });
+  const handleCategoriesChange = (selectedCategories) => {
+    setNewBlog((prev) => ({
+      ...prev,
+      categories: selectedCategories,
+    }));
+  };
+
+  const handleTagsChange = (selectedTags) => {
+    setNewBlog((prev) => ({
+      ...prev,
+      tags: [...new Set([...selectedTags])],
+    }));
+  };
+
+  const handlePost = async () => {
+    try {
+      const response = await postBlog(newBlog);
+      console.log("Blog posted successfully:", response);
+      setNewBlog({ title: "", content: "", categories: [], tags: [] });
+    } catch (error) {
+      console.error("Failed to post blog:", error);
+    }
   };
 
   const formStyle = {
@@ -43,8 +70,6 @@ const BlogPost = () => {
     backgroundColor: "whitesmoke",
   };
 
-  const { userRole } = useContext(UserContext);
-
   return (
     <Layout style={{ minHeight: "100vh" }}>
       <Sider collapsible>
@@ -57,7 +82,7 @@ const BlogPost = () => {
           </Menu.Item>
           {userRole !== "Reader" && (
             <Menu.Item key="2" icon={<EditOutlined />}>
-              <Link to="/products">Post</Link>
+              <Link to="/post-blog">Post</Link>
             </Menu.Item>
           )}
           <Menu.Item key="3" icon={<SettingOutlined />}>
@@ -90,7 +115,33 @@ const BlogPost = () => {
                 value={newBlog.content}
                 onChange={handleInput}
               />
-              <Button type="primary" onClick={handlePost}>
+              <Select
+                mode="multiple"
+                style={inputStyle}
+                placeholder="Select Categories"
+                value={newBlog.categories}
+                onChange={handleCategoriesChange}
+              >
+                {availableCategories.map((category) => (
+                  <Option key={category} value={category}>
+                    {category}
+                  </Option>
+                ))}
+              </Select>
+              <Select
+                mode="multiple"
+                style={inputStyle}
+                placeholder="Select Tags"
+                value={newBlog.tags}
+                onChange={handleTagsChange}
+              >
+                {availableTags.map((tag) => (
+                  <Option key={tag} value={tag}>
+                    {tag}
+                  </Option>
+                ))}
+              </Select>
+              <Button type="primary" onClick={handlePost} loading={loading}>
                 Post
               </Button>
             </div>
@@ -107,19 +158,13 @@ const BlogPost = () => {
               }}
             >
               <ReactMarkdown>{newBlog.content}</ReactMarkdown>
+              <p>
+                <strong>Categories:</strong> {newBlog.categories.join(", ")}
+              </p>
+              <p>
+                <strong>Tags:</strong> {newBlog.tags.join(", ")}
+              </p>
             </div>
-          </div>
-
-          <div className="blog-list">
-            <h2>Posted Blogs</h2>
-            <ul>
-              {blogs.map((blog) => (
-                <li key={blog.id}>
-                  <h3>{blog.title}</h3>
-                  <ReactMarkdown>{blog.content}</ReactMarkdown>
-                </li>
-              ))}
-            </ul>
           </div>
         </Content>
       </Layout>
@@ -128,4 +173,3 @@ const BlogPost = () => {
 };
 
 export default BlogPost;
-
