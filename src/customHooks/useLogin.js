@@ -26,7 +26,7 @@ const useLogin = () => {
         const { token, userName, role } = response.data.resultData;
         onNotify("success", "Successful", response?.data?.message);
 
-        sessionStorage.setItem("token", token);
+        sessionStorage.setItem("***", token);
         sessionStorage.setItem("userName", userName);
         setRole(role);
 
