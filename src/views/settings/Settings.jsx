@@ -1,8 +1,9 @@
 import { Layout, Menu, Form, Input, Button, message } from "antd";
-import { SettingOutlined, DashboardOutlined, AppstoreOutlined } from "@ant-design/icons"; // Import icons
-import { useState } from "react";
+import { SettingOutlined, DashboardOutlined, EditOutlined } from "@ant-design/icons";
+import { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
+import { UserContext } from "../../context/UserContext.jsx";
 
 const { Header, Content, Sider } = Layout;
 
@@ -28,10 +29,10 @@ const Settings = () => {
       passwordForm.resetFields();
     }
   };
-
   const handleLogout = () => {
     navigate("/");
   };
+  const { userRole } = useContext(UserContext)
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -40,11 +41,13 @@ const Settings = () => {
         </div>
         <Menu theme="dark" mode="inline" defaultSelectedKeys={["4"]}>
           <Menu.Item key="1" icon={<DashboardOutlined />}>
-          <Link to="/dashboard">Dashboard</Link>
+          <Link to="/dashboard">Home Page</Link>
           </Menu.Item>
-          <Menu.Item key="2" icon={<AppstoreOutlined />}>
-            <Link to="/products">Products</Link>
-          </Menu.Item>
+          {userRole !== "Reader" && (
+            <Menu.Item key="2" icon={<EditOutlined />}>
+              <Link to="/products">Post</Link>
+            </Menu.Item>
+          )}
           <Menu.Item key="4" icon={<SettingOutlined />}>
             <Link to="/settings">Settings</Link>
           </Menu.Item>
