@@ -10,8 +10,9 @@ export const endpoints = {
         blogs: "posts"
     },
 
-    users: {
-        getAllUsers: "admin/get-all-users",
+    post: {
+        postBlog: "createPost",
+        getPostDetails: "posts",
     },
 
     bearerToken: `Bearer ${sessionStorage.getItem("***")}`
