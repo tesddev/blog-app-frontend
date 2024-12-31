@@ -45,7 +45,7 @@ const Settings = () => {
           </Menu.Item>
           {userRole !== "Reader" && (
             <Menu.Item key="2" icon={<EditOutlined />}>
-              <Link to="/products">Post</Link>
+              <Link to="/post-blog">Post</Link>
             </Menu.Item>
           )}
           <Menu.Item key="4" icon={<SettingOutlined />}>

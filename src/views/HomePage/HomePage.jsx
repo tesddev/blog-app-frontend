@@ -4,14 +4,17 @@ import { Link } from "react-router-dom";
 import useDashboard from "../../customHooks/useDashboard";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const { Header, Content, Sider } = Layout;
 
 const HomePage = () => {
   const { blogs, loading } = useDashboard();
   const userName = sessionStorage.getItem("userName") || "User";
+  const navigate = useNavigate();
   const handleReadMore = (postId) => {
     console.log(`Navigating to full post with ID: ${postId}`);
+    navigate(`/posts/${postId}`);
   };
   const { userRole } = useContext(UserContext);
 
@@ -27,7 +30,7 @@ const HomePage = () => {
           </Menu.Item>
           {userRole !== "Reader" && (
             <Menu.Item key="2" icon={<EditOutlined />}>
-              <Link to="/products">Post</Link>
+              <Link to="/post-blog">Post</Link>
             </Menu.Item>
           )}
           <Menu.Item key="4" icon={<SettingOutlined />}>
