@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 import { App as AntApp } from "antd"; // Import Ant Design's App component
 import Product from "./views/Post/Post";
-import ProductDetails from "./views/Post/ProductDetails";
+import Details from "./views/HomePage/DetailsPage"
 import Login from "./views/Login";
 import Register from "./views/Register";
 import Dashboard from "./views/HomePage/HomePage";
@@ -11,8 +11,8 @@ const App = () => {
   return (
     <AntApp>
       <Routes>
-        <Route path="/products" element={<Product />} />
-        <Route path="/products/:id" element={<ProductDetails />} />
+        <Route path="/post-blog" element={<Product />} />
+        <Route path="/posts/:postId" element={<Details />} />
         <Route path="/register" element={<Register />} />
         <Route path="/settings" element={<Settings />} />
         <Route path="/dashboard" element={<Dashboard />} />
