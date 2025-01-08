@@ -36,9 +36,14 @@ const useDashboard = () => {
     fetchDashboardData();
   }, [fetchDashboardData]);
 
+  const refetchBlogs = async () => {
+    await fetchDashboardData();
+  };
+
   return {
     loading,
     blogs,
+    refetchBlogs
   };
 };
 
