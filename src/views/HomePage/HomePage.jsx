@@ -1,22 +1,31 @@
 import { Layout, Menu, Card } from "antd";
-import { SettingOutlined, DashboardOutlined, EditOutlined } from "@ant-design/icons";
-import { Link } from "react-router-dom";
 import useDashboard from "../../customHooks/useDashboard";
 import { useContext } from "react";
 import { UserContext } from "../../context/UserContext.jsx";
-import { useNavigate } from "react-router-dom";
+import useDeletePost from "../../customHooks/useDeletePost";
+import { Link, useNavigate } from "react-router-dom";
+import { DashboardOutlined, EditOutlined, SettingOutlined } from "@ant-design/icons";
 
 const { Header, Content, Sider } = Layout;
 
 const HomePage = () => {
-  const { blogs, loading } = useDashboard();
+  const { blogs, loading, refetchBlogs } = useDashboard();
+  const { onDeletePost, loading: deleteLoading } = useDeletePost();
   const userName = sessionStorage.getItem("userName") || "User";
   const navigate = useNavigate();
+  const { userRole } = useContext(UserContext);
+
   const handleReadMore = (postId) => {
     console.log(`Navigating to full post with ID: ${postId}`);
     navigate(`/posts/${postId}`);
   };
-  const { userRole } = useContext(UserContext);
+
+  const handleDeletePost = async (postId) => {
+    if (window.confirm("Are you sure you want to delete this post?")) {
+      await onDeletePost(postId);
+      await refetchBlogs();
+    }
+  };
 
   return (
     <Layout style={{ minHeight: "100vh" }}>
@@ -50,7 +59,7 @@ const HomePage = () => {
               <p>Loading...</p>
             ) : (
               <>
-                <h2 className="text-center">Total Blogs: {blogs.length}</h2>
+                <h2 className="text-center">Available Blogs: {blogs.length}</h2>
                 <div style={{ marginTop: "20px" }}>
                   {blogs.map((blog) => (
                     <Card
@@ -59,20 +68,37 @@ const HomePage = () => {
                       style={{ marginBottom: "16px" }}
                     >
                       <p>{blog.postPreview}</p>
-                      <button
-                        style={{
-                          marginTop: "8px",
-                          padding: "8px 16px",
-                          backgroundColor: "#1890ff",
-                          color: "white",
-                          border: "none",
-                          borderRadius: "4px",
-                          cursor: "pointer",
-                        }}
-                        onClick={() => handleReadMore(blog.postId)}
-                      >
-                        Read more
-                      </button>
+                      <div style={{ display: "flex", justifyContent: "space-between", marginTop: "8px" }}>
+                        <button
+                          style={{
+                            padding: "8px 16px",
+                            backgroundColor: "#1890ff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "4px",
+                            cursor: "pointer",
+                          }}
+                          onClick={() => handleReadMore(blog.postId)}
+                        >
+                          Read more
+                        </button>
+                        {userRole === "Admin" && (
+                          <button
+                            style={{
+                              padding: "8px 16px",
+                              backgroundColor: "#ff4d4f",
+                              color: "white",
+                              border: "none",
+                              borderRadius: "4px",
+                              cursor: "pointer",
+                            }}
+                            onClick={() => handleDeletePost(blog.postId)}
+                            disabled={deleteLoading}
+                          >
+                            {deleteLoading ? "Deleting..." : "Delete"}
+                          </button>
+                        )}
+                      </div>
                     </Card>
                   ))}
                 </div>
