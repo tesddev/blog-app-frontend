@@ -5,14 +5,19 @@ export const endpoints = {
     },
 
     dashboard: {
-        userCount: "user/get-all-users-count",
-        productCount: "product/get-all-products-count",
         blogs: "posts"
     },
 
     post: {
         postBlog: "createPost",
         getPostDetails: "posts",
+        deletePost: "posts",
+        editPost: "posts"
+    },
+
+    comments: {
+        postComment: "postComment",
+        deleteComment: "deleteComment"
     },
 
     bearerToken: `Bearer ${sessionStorage.getItem("***")}`
