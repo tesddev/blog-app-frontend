@@ -24,7 +24,7 @@ Follow these steps to run the BlogApp frontend locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/blogapp-frontend.git
+   git clone https://github.com/tesddev/blog-app-frontend.git
    cd blogapp-frontend
 
 2. Install dependencies:
